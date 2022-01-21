@@ -49,7 +49,8 @@ class Stock:
 
         # Figure
         fig = figure(title=f"Pergerakan Saham {self.symbol}",
-                     width=self._fig_width,
+                     #  width=self._fig_width,
+                     #  height=480,
                      x_axis_type="datetime",
                      x_range=x_range,
                      y_axis_location='right',
@@ -94,10 +95,11 @@ class Stock:
 
     def __draw_range_figure(self, source, x_range, y_range):
         select = figure(plot_height=200,
-                        plot_width=self._fig_width,
+                        height=160,
+                        # plot_width=self._fig_width,
                         y_range=y_range,
                         x_axis_type='datetime',
-                        y_axis_label='Harga per lembar',
+                        y_axis_label="Harga/lembar",
                         tools='',
                         toolbar_location=None)
 
@@ -120,13 +122,14 @@ class Stock:
         source = ColumnDataSource(df)
 
         dates = np.array(df['Date'])
-        x_range = Range1d(dates[-32], dates[-1])
+        x_range = Range1d(dates[-90], dates[-1])
 
         main_fig = self.__draw_main_figure(df, source, x_range)
         range_fig = self.__draw_range_figure(
             source, main_fig.x_range, main_fig.y_range)
 
-        layout = column([main_fig, range_fig])
+        layout = column(
+            [column(main_fig, sizing_mode='stretch_both'), range_fig], sizing_mode='stretch_width')
         return layout
 
 
